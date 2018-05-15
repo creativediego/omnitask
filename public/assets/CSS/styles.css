@@ -1,0 +1,87 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #666;
+}
+
+.jumbotron {
+    position: relative;
+    height: 25vh;
+    background-color: #446de8;
+    border-radius: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+
+.title {
+    font-weight: 300;
+}
+
+.tagline {
+    position: absolute;
+    bottom: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .jumbotron {
+        height: 45vh;
+    }
+    .title {
+        font-size: 5rem;
+    }
+}
+
+.icon {
+    color: #446de8;
+    margin-right: 1rem;
+}
+
+.delete {
+    color: #ffb441;
+}
+
+.task {
+    padding: .5rem 0;
+    font-size: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
+
+.task-button {
+    cursor: pointer;
+    font-size: 2rem;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.task p {
+    margin: 0;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: lightgrey;
+}
+
+.new-task-btn-container {
+    position: absolute;
+    bottom: -1rem;
+    right: 6vw;
+}
+
+.new-task-btn {
+    cursor: pointer;
+    height: 3rem;
+    width: 3rem;
+    background-color: #ffb441;
+    border-radius: 50%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, .12), 0 1px 1px 0 rgba(0, 0, 0, .24);
+}
+
+.new-task-btn-icon {
+    top: 36%;
+    left: 36%;
+    position: absolute;
+}
