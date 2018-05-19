@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 
-    (function createNewTaskModal() {
+    function createNewTaskModal() {
         //Set up modal when the user clicks to create a new task.
         $("#new-task").on("click", function() {
             //Empty modal body from previous requests
@@ -14,7 +14,7 @@ $(document).ready(function() {
                 <input required type="text" class="form-control" name="task">
             <div class="modal-footer">
                 <button  type="button" class="btn btn-secondary modal-cancel" data-dismiss="modal">Cancel</button>
-                 <button type="submit" class="btn btn-primary modal-confirm">Create Task</button>
+                 <button type="submit" class="btn btn-success modal-confirm">Create Task</button>
             </div>
              </form>`;
 
@@ -23,11 +23,11 @@ $(document).ready(function() {
             $('#modal').modal('toggle');
 
         });
-    })();
+    };
 
-    (function deleteTaskModal() {
+    function deleteTaskModal() {
         //Set up delete modal when the user clicks the delete icon beside a task.
-        $(".delete-task-btn").on("click", function(e) {
+        $("body").on("click", ".delete-task-btn", function(e) {
             e.preventDefault();
 
             //Empty modal body from previous requests
@@ -40,7 +40,7 @@ $(document).ready(function() {
         <p class="lead">${$(this).parent().text()}</p>
         <div class="modal-footer">
         <button  type="button" class="btn btn-secondary modal-cancel" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger primary modal-confirm delete-task">Delete</button>
+        <button type="button" class="btn btn-danger primary modal-confirm delete-task" data-dismiss="modal">Delete</button>
         </div>`;
 
             $(".modal-body").append(modalBody);
@@ -53,7 +53,50 @@ $(document).ready(function() {
 
 
         });
-    })();
+    };
+
+    //Reload tasks into UI
+    function updateUi() {
+
+        //Make API call to the database to fetch tasks.
+        $.get("/api/tasks/all", function(data) {
+
+            //Clear task divs.
+            $("#tasks").empty();
+
+            if (data.length === 0) {
+
+                $("#tasks").append(`<div class="mt-4 alert alert-success">No tasks created yet. Create one at the upper-right corner.</div>`);
+
+            } else {
+
+                data.forEach(function(element) {
+                    console.log(element.completed === false)
+                    let task;
+                    if (element.completed === false) {
+                        task = $(`<div class="task" id="${element.id}" value="${element.completed}">
+                                <p><span class="task-button update-task">
+                                        <i class="far fa-circle icon"></i></span>
+                                    <span class="task-button delete-task-btn">
+                                        <i class="fas fa-times icon delete"></i></span>
+                                <span>${element.title}<span></p></div>`)
+                    } else {
+                        task = $(`<div class="task" id="${element.id}" value="${element.completed}">
+                                <p><span class="task-button update-task">
+                                        <i class="fas fa-check-circle icon"></i></span>
+                                    <span class="task-button delete-task-btn">
+                                        <i class="fas fa-times icon delete"></i></span>
+                                <span class="completed"> ${element.title}<span></p></div>`)
+                    }
+
+                    $("#tasks").append(task);
+                });
+            }
+
+        });
+
+    };
+
 
     //Process delete request when the user confirms delete in the delete modal.
     function deletePost(id) {
@@ -65,7 +108,7 @@ $(document).ready(function() {
 
 
             }).then(function() {
-                window.location.href = "/"
+                updateUi();
 
             });
 
@@ -77,21 +120,41 @@ $(document).ready(function() {
 
     });
 
-    //Updates UI to show complete tasks. Incomplete task UI is the default.
-    (function updateUI() {
 
-        $(".task").each(function() {
+    function updateTask() {
+        //Update task
+        $("body").on("click", ".update-task", function() {
 
-            if ($(this).attr("value") === "true") {
+            let taskId = $(this).closest(".task").attr("id");
 
-                $(this).addClass("completed");
-                $(this).find(".icon").removeClass("far fa-circle");
-                $(this).find(".icon").addClass("fas fa-check-circle");
-            }
+            completeTask(taskId);
+        });
+
+    }
+
+    function completeTask(taskId) {
+
+        $.ajax({
+            method: "PUT",
+            url: "/api/tasks/update/complete/" + taskId
+
+        }).then(function() {
+
+            updateUi();
+
 
         });
 
-    })();
+    }
 
+
+    (function initialize() {
+        updateUi();
+        createNewTaskModal();
+        deleteTaskModal();
+        updateTask();
+
+
+    })();
 
 });
