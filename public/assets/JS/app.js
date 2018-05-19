@@ -2,6 +2,7 @@ $(document).ready(function() {
 
 
     function createNewTaskModal() {
+
         //Set up modal when the user clicks to create a new task.
         $("#new-task").on("click", function() {
             //Empty modal body from previous requests
@@ -11,7 +12,7 @@ $(document).ready(function() {
             let modalBody =
                 `<form action="/" method="POST" >
                 <p>Task Title</p>
-                <input required type="text" class="form-control" name="task">
+                <input required type="text" class="form-control" name="task" id="task-title" autofocus>
             <div class="modal-footer">
                 <button  type="button" class="btn btn-secondary modal-cancel" data-dismiss="modal">Cancel</button>
                  <button type="submit" class="btn btn-success modal-confirm">Create Task</button>
@@ -21,6 +22,11 @@ $(document).ready(function() {
             $(".modal-body").append(modalBody);
             $(".modal-title").text("Create a New Task");
             $('#modal').modal('toggle');
+
+            // Every time a modal is shown, if it has an autofocus element, focus on it.
+            $('#modal').on('shown.bs.modal', function() {
+                $('#task-title').trigger('focus')
+            })
 
         });
     };
