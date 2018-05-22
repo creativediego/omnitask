@@ -1,86 +1,113 @@
-const bCrypt = require("bcrypt-nodejs");
+ const bCrypt = require("bcrypt-nodejs");
 
-///Inside this block, we initialize the passport-local strategy, and the user model, which will be passed as an argument
-module.exports = function(passport, user) {
+ ///Inside this block, we initialize the passport-local strategy, and the user model, which will be passed as an argument
+ module.exports = function(passport, user) {
 
-    const User = user;
-    const LocalStrategy = require("passport-local").Strategy;
+     const User = user;
+     const LocalStrategy = require("passport-local").Strategy;
 
-    //Then we define our custom strategy with our instance of the LocalStrategy
-    passport.use("local-signup", new LocalStrategy(
+     passport.serializeUser(function(user, done) {
 
-        {
-            usernameField: "email",
-            passwordField: "password",
-            passReqToCallback: true // allows us to pass back the entire request to the callback
-        },
+         done(null, user.id);
+     });
 
-        /*Now we have declared what request (req) fields our usernameField and passwordField (passport variables) are. 
-        The last variable passReqToCallback allows us to pass the entire request to the callback, which is particularly useful for signing up.
-        After the last comma, we add this callback function.*/
+     /*In the deserialize function above, we use the Sequelize findById promise to get the user, and if successful, an instance of the Sequelize model is returned. 
+     To get the User object from this instance, we use the Sequelize getter function user.get().*/
 
-        function(req, email, password, done) {
+     passport.deserializeUser(function(id, done) {
 
-            //In this function, we will handle storing a user's details.
+         User.findById(id).then(function(user) {
 
-            //First, we add our hashed password generating function inside the callback function.
-            const generateHash = function(password) {
+             if (user) {
+                 done(null, user.get());
+             } else {
+                 done(user.errors, null);
+             }
 
-                return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
+         });
 
-            };
+     });
 
-            // Then, using the Sequelize user model we initialized earlier as User, 
-            // we check to see if the user already exists, and if not we add them.
+     //Then we define our custom strategy with our instance of the LocalStrategy
+     passport.use("local-signup", new LocalStrategy(
 
-            User.findOne({
-                where: {
-                    email: email
-                }
-            }).then(function(user) {
+         {
+             usernameField: "email",
+             passwordField: "password",
+             passReqToCallback: true // allows us to pass back the entire request to the callback
+         },
 
-                if (user)
+         /*Now we have declared what request (req) fields our usernameField and passwordField (passport variables) are. 
+         The last variable passReqToCallback allows us to pass the entire request to the callback, which is particularly useful for signing up.
+         After the last comma, we add this callback function.*/
 
-                {
-                    return done(null, false, {
-                        message: "The email you entered is already taken."
-                    });
+         function(req, email, password, done) {
 
-                } else {
+             //In this function, we will handle storing a user's details.
 
-                    const userPassword = generateHash(password);
+             //First, we add our hashed password generating function inside the callback function.
+             const generateHash = function(password) {
 
-                    const data = {
+                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
 
-                        email: email,
-                        password: userPassword,
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname
-                    };
+             };
 
-                    //User.create() is a Sequelize method for adding new entries to the database. 
-                    //Notice that the values in the data object are gotten from the req.body object which contains the input from our signup form. 
+             // Then, using the Sequelize user model we initialized earlier as User, 
+             // we check to see if the user already exists, and if not we add them.
 
-                    User.create(data).then(function(newUser, created) {
+             User.findOne({
+                 where: {
+                     email: email
+                 }
+             }).then(function(user) {
 
-                        if (!newUser) {
+                 if (user)
 
-                            return done(null, false);
-                        }
+                 {
+                     return done(null, false, {
+                         message: "The email you entered is already taken."
+                     });
 
-                        if (newUser) {
+                 } else {
 
-                            return done(null, newUser);
-                        }
+                     const userPassword = generateHash(password);
 
-                    });
+                     const data = {
 
-                }
+                         email: email,
+                         password: userPassword,
+                         name: req.body.name
+                             /*
+                             firstname: req.body.firstname,
+                             lastname: req.body.lastname
+                             */
+                     };
 
-            });
+                     //User.create() is a Sequelize method for adding new entries to the database. 
+                     //Notice that the values in the data object are gotten from the req.body object which contains the input from our signup form. 
 
-        }
+                     User.create(data).then(function(newUser, created) {
 
-    ));
+                         if (!newUser) {
 
-}
+                             return done(null, false);
+                         }
+
+                         if (newUser) {
+
+                             return done(null, newUser);
+                         }
+
+                     });
+
+                 }
+
+             });
+
+         }
+
+     ));
+
+
+
+ }
