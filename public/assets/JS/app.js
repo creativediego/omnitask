@@ -65,6 +65,13 @@ $(document).ready(function() {
     //Update UI of completed tasks
     function updateUi() {
 
+        //If there are no tasks, display message.
+        if ($("#tasks").children().length === 0) {
+
+            $("#tasks").append(`<div class="mt-4 alert alert-success">No tasks created yet. Create one at the upper-right corner.</div>`);
+
+        }
+
         $(".task").each(function() {
             if ($(this).attr("value") === "true") {
 
@@ -75,6 +82,7 @@ $(document).ready(function() {
 
                 $(this).find(".status-icon").addClass("task-icon-incomplete")
             }
+
 
         });
     }
