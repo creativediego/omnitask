@@ -6,14 +6,13 @@ const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const flash = require("connect-flash");
-const developmentSettings = require("./development-settings");
 
 //Middleware BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // For Passport
-app.use(session({ secret: developmentSettings.sessionSecret, resave: true, saveUninitialized: true })); // session secret
+app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
