@@ -10,7 +10,7 @@ $(document).ready(function() {
 
             //Build Modal
             let modalBody =
-                `<form action="/" method="POST" >
+                `<form action="/api/tasks/create" method="POST" >
                 <p>Task Title</p>
                 <input required type="text" class="form-control" name="task" id="task-title" autofocus>
             <div class="modal-footer">
@@ -61,8 +61,26 @@ $(document).ready(function() {
         });
     };
 
-    //Reload tasks into UI
+    //Update UI
+    //Update UI of completed tasks
     function updateUi() {
+
+        $(".task").each(function() {
+            if ($(this).attr("value") === "true") {
+
+                $(this).find(".task-name").addClass("completed");
+                $(this).find(".status-icon").addClass("task-icon-completed")
+
+            } else {
+
+                $(this).find(".status-icon").addClass("task-icon-incomplete")
+            }
+
+        });
+    }
+
+    //Reload tasks into UI
+    function fetchTasks() {
 
         //Make API call to the database to fetch tasks.
         $.get("/api/tasks/all", function(data) {
@@ -82,20 +100,21 @@ $(document).ready(function() {
                     if (element.completed === false) {
                         task = $(`<div class="task" id="${element.id}" value="${element.completed}">
                                 <p><span class="task-button update-task">
-                                        <i class="far fa-circle icon"></i></span>
+                                <span class="status-icon icon"></span></span>
                                     <span class="task-button delete-task-btn">
                                         <i class="fas fa-times icon delete"></i></span>
                                 <span>${element.title}<span></p></div>`)
                     } else {
                         task = $(`<div class="task" id="${element.id}" value="${element.completed}">
                                 <p><span class="task-button update-task">
-                                        <i class="fas fa-check-circle icon"></i></span>
+                                <span class="status-icon icon"></span></span>
                                     <span class="task-button delete-task-btn">
                                         <i class="fas fa-times icon delete"></i></span>
                                 <span class="completed"> ${element.title}<span></p></div>`)
                     }
 
                     $("#tasks").append(task);
+                    updateUi();
                 });
             }
 
@@ -114,7 +133,7 @@ $(document).ready(function() {
 
 
             }).then(function() {
-                updateUi();
+                fetchTasks();
 
             });
 
@@ -131,9 +150,12 @@ $(document).ready(function() {
         //Update task
         $("body").on("click", ".update-task", function() {
 
-            let taskId = $(this).closest(".task").attr("id");
+            //If task is not complete
+            if ($(this).closest(".task").attr("value") === "false") {
+                let taskId = $(this).closest(".task").attr("id");
 
-            completeTask(taskId);
+                completeTask(taskId);
+            }
         });
 
     }
@@ -146,7 +168,7 @@ $(document).ready(function() {
 
         }).then(function() {
 
-            updateUi();
+            fetchTasks();
 
 
         });
@@ -162,5 +184,8 @@ $(document).ready(function() {
 
 
     })();
+
+
+
 
 });

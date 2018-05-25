@@ -1,6 +1,6 @@
 module.exports = function(sequelize, Sequelize) {
 
-    const User = sequelize.define("user", {
+    const User = sequelize.define("User", {
 
         /*
                 firstname: {
@@ -48,6 +48,15 @@ module.exports = function(sequelize, Sequelize) {
         }
 
     });
+
+    User.associate = function(models) {
+        // Associating Author with Posts
+        // When an Author is deleted, also delete any associated Posts
+        User.hasMany(models.Task, {
+            onDelete: "cascade"
+        });
+    };
+
 
     return User
 

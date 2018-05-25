@@ -20,6 +20,15 @@ module.exports = function(sequelize, DataTypes) {
 
     });
 
+    Task.associate = function(models) {
+
+        Task.belongsTo(models.User, {
+            foreignKey: {
+
+                allowNull: false
+            }
+        });
+    }
     return Task;
 
 };

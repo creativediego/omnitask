@@ -37,6 +37,16 @@ body {
     margin-right: 1rem;
 }
 
+.task-icon-incomplete:after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f111";
+}
+
+.task-icon-completed:after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f058";
+}
+
 .delete {
     color: #333;
 }
