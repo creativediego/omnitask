@@ -31,7 +31,7 @@ const apiRouter = require("./routes/api-routes")(app, passport);
 require("./config/passport")(passport, db.User);
 
 
-//Public/Static folder
+//Public/static folder
 app.use(express.static("public"));
 
 //Handlebars for templating
