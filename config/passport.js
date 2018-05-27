@@ -142,21 +142,13 @@
 
              }).then(function(user) {
 
-                 if (!user) {
+                 if (!user || !isValidPassword(user.password, password)) {
 
                      return done(null, false, {
-                         message: "Email does not exist."
+                         message: "The credentials you entered are incorrect."
                      });
                  }
 
-                 if (!isValidPassword(user.password, password)) {
-
-                     return done(null, false, {
-
-                         message: "Incorrect Password"
-
-                     });
-                 }
 
                  const userinfo = user.get();
                  return done(null, userinfo)

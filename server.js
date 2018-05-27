@@ -5,16 +5,30 @@ const app = express();
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const expressValidator = require("express-validator");
 const flash = require("connect-flash");
 
+
 //Middleware BodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(expressValidator());
 
 // For Passport
 app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+app.use(flash());
+
+
+//session variables
+app.use(function(req, res, next) {
+
+    res.locals.flashError = req.flash("error")[0];
+    res.locals.user = req.user;
+    next();
+
+});
 
 //DB
 const db = require("./models");

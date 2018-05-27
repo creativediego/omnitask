@@ -5,38 +5,36 @@ const apiController = require("../controller/apicontroller");
 
 module.exports = function(app, passport) {
 
-    //Serve home page.
-    app.get("/", authController.isLoggedIn, function(req, res) {
-
-        res.render("dashboard");
-
-    });
-
     app.get("/signup", authController.signup);
 
-    app.get("/signin", authController.signin);
+    app.get("/login", authController.login);
 
-    app.get("/dashboard", authController.isLoggedIn, function(req, res) {
-        //console.log("HELLO WORLD: ", req.user.email)
-        db.Task.findAll({
-            where: { UserId: req.user.id }
-        }).then(function(dbTasks) {
 
-            res.render("dashboard", { tasks: dbTasks });
-            console.log(dbTasks)
-                //res.json(dbTasks);
-
-        });
-    });
 
     //Create a task route
     //app.post("/dashboard", authController.isLoggedIn, apiController.createTask);
 
     //Passport sign up strategy route
-    app.post("/signup", passport.authenticate("local-signup", {
+    app.post("/signup", function(req, res, next) {
+
+        req.checkBody("name", "Name cannot be empty.").notEmpty();
+        req.checkBody("email", "The email you entered is invalid. Try a valid email.").isEmail();
+        req.checkBody("password", "Password must be at least 8 characters long, include one lowercase character, one uppercase character, a number, and a special character.").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "i");
+        req.checkBody("passwordMatch", "Passwords do not match. Please try again.").equals(req.body.password);
+
+        const validationErrors = req.validationErrors();
+
+        if (validationErrors) {
+            res.render("signup", { validationrrors })
+        } else {
+            next();
+        }
+
+    }, passport.authenticate("local-signup", {
 
             successRedirect: "/dashboard",
-            failureRedirect: "/signup"
+            failureRedirect: "/signup",
+            failureFlash: true
 
         }
 
@@ -46,10 +44,11 @@ module.exports = function(app, passport) {
     app.get('/logout', authController.logout);
 
 
-    app.post("/signin", passport.authenticate("local-signin", {
+    app.post("/login", passport.authenticate("local-signin", {
 
             successRedirect: "/dashboard",
-            failureRedirect: "/signin"
+            failureRedirect: "/login",
+            failureFlash: true
 
 
         },

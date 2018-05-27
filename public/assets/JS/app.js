@@ -68,7 +68,7 @@ $(document).ready(function() {
         //If there are no tasks, display message.
         if ($("#tasks").children().length === 0) {
 
-            $("#tasks").append(`<div class="mt-4 alert alert-success">No tasks created yet. Create one at the upper-right corner.</div>`);
+            $("#tasks").append(`<div class="mt-4 alert alert-success">No tasks created yet. Use the green plus icon to create one.</div>`);
 
         }
 

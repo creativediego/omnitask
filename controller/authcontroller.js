@@ -5,9 +5,9 @@ module.exports.signup = function(req, res) {
 
 };
 
-module.exports.signin = function(req, res) {
+module.exports.login = function(req, res) {
 
-    res.render("signin");
+    res.render("login");
 
 };
 
@@ -21,7 +21,7 @@ module.exports.logout = function(req, res) {
 
     req.session.destroy(function(err) {
 
-        res.redirect("/signin");
+        res.redirect("/login");
 
     });
 
@@ -34,6 +34,6 @@ module.exports.isLoggedIn = function(req, res, next) {
 
         return next();
 
-    res.redirect("/signin")
+    res.redirect("/login")
 
 }
