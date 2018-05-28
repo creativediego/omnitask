@@ -15,7 +15,7 @@ module.exports = function(app, passport) {
 
 
     //Passport sign up strategy route
-    app.post("/signup", recaptcha.middleware.verify, authController.validateRecaptcha, authController.validateSignUp, passport.authenticate("local-signup", {
+    app.post("/signup", authController.validateSignUp, recaptcha.middleware.verify, authController.validateRecaptcha, passport.authenticate("local-signup", {
 
             successRedirect: "/dashboard",
             failureRedirect: "/signup",
