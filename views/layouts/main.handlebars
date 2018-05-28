@@ -42,9 +42,11 @@
             <h1 class="title">OmniTask <i class="fas fa-check-circle"></i></h1>
             <p class="lead">Remember the stuff that matters, and get it done.</p>
         </section>
+        {{#if user}}
         <div class="new-task-btn-container" id="new-task">
             <div class="position-relative new-task-btn"><i class="fas fa-plus new-task-btn-icon"></i></div>
         </div>
+        {{/if}}
     </header>
     <main class="container mb-5">
         
