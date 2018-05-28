@@ -25,7 +25,7 @@ module.exports = function(app, passport) {
         const validationErrors = req.validationErrors();
 
         if (validationErrors) {
-            res.render("signup", { validationrrors })
+            res.render("signup", { errors: validationErrors })
         } else {
             next();
         }
