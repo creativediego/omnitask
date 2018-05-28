@@ -36,7 +36,7 @@ module.exports.completeTask = function(req, res) {
 };
 
 module.exports.createTask = function(req, res) {
-    console.log(req.body)
+
     db.Task.create({
             title: req.body.task,
             UserId: req.user.id
