@@ -24,7 +24,7 @@ app.use(flash());
 //session variables
 app.use(function(req, res, next) {
 
-    res.locals.flashError = req.flash("error")[0];
+    res.locals.flashError = req.flash("error");
     res.locals.user = req.user;
     next();
 

@@ -10,9 +10,8 @@ module.exports = function(app, passport) {
 
         res.render("dashboard");
 
-
-
     });
+
 
     //Serve get requests for all tasks
     app.get("/api/tasks/all", authController.isLoggedIn, apiController.fetchTasks);

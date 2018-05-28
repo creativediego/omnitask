@@ -182,10 +182,67 @@ $(document).ready(function() {
         });
 
     }
+    /*
+        function processSignUp() {
 
+            document.querySelector("#signup").addEventListener("submit", submitForm);
+
+            function submitForm(e) {
+                e.preventDefault();
+
+                const formData = {
+
+                    name: $("#name").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    passwordMatch: $("#passwordMatch").val(),
+                    captcha: $("#g-recaptcha-response").val()
+
+                }
+
+                $.post("/signup", formData).then((response) => {
+                    $("#errors").empty();
+
+                    if (response) {
+                        $(response).each(function() {
+                            console.log("RESONSE", response)
+
+                            $("#errors").append(`<div class="alert alert-danger">${this.msg}</div>`)
+
+                        });
+
+                        if (response.msg) {
+
+                            console.log("MESSAGE: ", response.msg)
+                            $("#errors").append(`<div class="alert alert-danger">${this.msg}</div>`)
+
+                        }
+
+
+
+                    }
+                })
+
+
+            }
+
+
+            /*
+            $(".recaptcha-checkbox-checkmark").on("click", function() {
+                let catpchaValue = $("#recaptcha-token").attr("value");
+                $("#captcha-token")
+                hiddenCaptchaInput = $('<input style="visibility: hidden;" class="form-control" name="captcha"/>')
+                $(hiddenCaptchaInput).val(catpchaValue);
+                $("form").append(hiddenCaptchaInput);
+
+            });
+    
+
+}*/
 
     (function initialize() {
         updateUi();
+        //processSignUp();
         createNewTaskModal();
         deleteTaskModal();
         updateTask();

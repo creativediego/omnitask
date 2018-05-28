@@ -1,36 +1,21 @@
 const db = require("../models");
 const authController = require("../controller/authcontroller");
 const apiController = require("../controller/apicontroller");
+const Recaptcha = require('express-recaptcha').Recaptcha;
+var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
+require('dotenv').config()
 
 
 module.exports = function(app, passport) {
 
-    app.get("/signup", authController.signup);
+
+    app.get("/signup", recaptcha.middleware.render, authController.signup);
 
     app.get("/login", authController.login);
 
 
-
-    //Create a task route
-    //app.post("/dashboard", authController.isLoggedIn, apiController.createTask);
-
     //Passport sign up strategy route
-    app.post("/signup", function(req, res, next) {
-
-        req.checkBody("name", "Name cannot be empty.").notEmpty();
-        req.checkBody("email", "The email you entered is invalid. Try a valid email.").isEmail();
-        req.checkBody("password", "Password must be at least 8 characters long, include one lowercase character, one uppercase character, a number, and a special character.").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "i");
-        req.checkBody("passwordMatch", "Passwords do not match. Please try again.").equals(req.body.password);
-
-        const validationErrors = req.validationErrors();
-
-        if (validationErrors) {
-            res.render("signup", { errors: validationErrors })
-        } else {
-            next();
-        }
-
-    }, passport.authenticate("local-signup", {
+    app.post("/signup", recaptcha.middleware.verify, authController.validateRecaptcha, authController.validateSignUp, passport.authenticate("local-signup", {
 
             successRedirect: "/dashboard",
             failureRedirect: "/signup",
@@ -38,25 +23,19 @@ module.exports = function(app, passport) {
 
         }
 
-
     ));
 
-    app.get('/logout', authController.logout);
-
-
+    //Passport login strategy
     app.post("/login", passport.authenticate("local-signin", {
 
             successRedirect: "/dashboard",
             failureRedirect: "/login",
             failureFlash: true
 
-
         },
 
     ));
 
-    //Complete a task route
-    app.put("/api/tasks/update/complete/:id", authController.isLoggedIn, apiController.completeTask);
-
+    app.get('/logout', authController.logout);
 
 };

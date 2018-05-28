@@ -1,7 +1,11 @@
 const db = require("../models");
+const request = require("request");
+require('dotenv').config()
+
+
 module.exports.signup = function(req, res) {
 
-    res.render("signup");
+    res.render("signup", { captcha: res.recaptcha })
 
 };
 
@@ -35,5 +39,42 @@ module.exports.isLoggedIn = function(req, res, next) {
         return next();
 
     res.redirect("/login")
+
+}
+
+//Middleware to validate sign up form.
+module.exports.validateSignUp = function(req, res, next) {
+
+    req.checkBody("name", "Name cannot be empty.").notEmpty();
+    req.checkBody("email", "The email you entered is invalid. Try a valid email.").isEmail();
+    req.checkBody("password", "Password must be at least 8 characters long, include one lowercase character, one uppercase character, a number, and a special character.").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "i");
+    req.checkBody("passwordMatch", "Passwords do not match. Please try again.").equals(req.body.password);
+
+    const validationErrors = req.validationErrors();
+
+    if (validationErrors) {
+        res.render("signup", { errors: validationErrors });
+
+    } else {
+        next();
+    }
+}
+
+//Middleware to check is reCaptcha has worked.
+module.exports.validateRecaptcha = function(req, res, next) {
+
+    //If captcha succeeds
+    if (!req.recaptcha.error) {
+
+        next();
+
+    }
+    //If the fails
+    else {
+
+        res.render("signup", { flashError: "Please select reCAPTCHA." })
+
+    }
+
 
 }
