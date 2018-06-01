@@ -64,8 +64,8 @@ module.exports.postForgot = function(req, res, next) {
                 //Send email.
                 transport.sendMail({
                         from: 'doNotReply@omnitask.app',
-                        to: 'Diego <diegosoftwaredeveloper@gmail.com>',
-                        subject: 'Forgot password!',
+                        to: user.email,
+                        subject: 'Reset password request',
                         html: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                             'http://' + req.headers.host + '/reset/' + token + '\n\n' +
