@@ -1,9 +1,8 @@
-const db = require("../models");
-const authController = require("../controller/authcontroller");
-const apiController = require("../controller/apicontroller");
+const authController = require("../controller/authController");
+const apiController = require("../controller/apiController");
 
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, db) {
 
     //Serve home page.
     app.get("/", authController.isLoggedIn, function(req, res) {

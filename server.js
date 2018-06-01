@@ -25,6 +25,7 @@ app.use(flash());
 app.use(function(req, res, next) {
 
     res.locals.flashError = req.flash("error");
+    res.locals.flashInfo = req.flash("info");
     res.locals.user = req.user;
     next();
 
@@ -34,9 +35,10 @@ app.use(function(req, res, next) {
 const db = require("./models");
 
 //Routes
-const authRouter = require("./routes/auth-routes")(app, passport);
-const htmlRouter = require("./routes/html-routes")(app, passport);
-const apiRouter = require("./routes/api-routes")(app, passport);
+const authRouter = require("./routes/auth")(app, passport, db);
+const forgotPasswordRouter = require("./routes/password")(app, passport, db);
+const htmlRouter = require("./routes/html")(app, passport, db);
+const apiRouter = require("./routes/api")(app, passport, db);
 
 
 

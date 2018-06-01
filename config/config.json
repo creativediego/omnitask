@@ -8,7 +8,7 @@
     },
     "test": {
         "username": "root",
-        "password": "",
+        "password": "root",
         "database": "todo_app",
         "host": "localhost",
         "dialect": "mysql"

@@ -2,13 +2,15 @@ const db = require("../models");
 const request = require("request");
 require('dotenv').config()
 
+
 module.exports.signup = function(req, res) {
+    console.log(res.recaptcha);
 
     res.render("signup", { captcha: res.recaptcha });
 
 };
 
-module.exports.login = function(req, res) {
+module.exports.getLogin = function(req, res) {
 
     res.render("login");
 
@@ -74,6 +76,5 @@ module.exports.validateRecaptcha = function(req, res, next) {
         res.render("signup", { flashError: "Please select reCAPTCHA." });
 
     }
-
 
 }

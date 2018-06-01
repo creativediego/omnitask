@@ -1,17 +1,16 @@
-const db = require("../models");
-const authController = require("../controller/authcontroller");
-const apiController = require("../controller/apicontroller");
+const authController = require("../controller/authController");
+const apiController = require("../controller/apiController");
 const Recaptcha = require('express-recaptcha').Recaptcha;
 var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
 require('dotenv').config()
 
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, db) {
 
 
     app.get("/signup", recaptcha.middleware.render, authController.signup);
 
-    app.get("/login", authController.login);
+    app.get("/login", authController.getLogin);
 
 
     //Passport sign up strategy route

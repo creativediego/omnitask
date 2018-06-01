@@ -1,0 +1,26 @@
+ 
+  <h2 class="text-center">Enter your email to reset your password:</h2>
+<div class="col-lg-6 mt-4 container">
+{{#if flashError}}
+<div class="alert alert-danger">{{flashError}}</div>
+{{/if}}
+
+{{#if flashInfo}}
+<div class="alert alert-success">{{flashInfo}}</div>
+{{/if}}
+
+<form id="forgot-password" name="forgot-password" method="post" action="/forgot">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input name ="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    
+  </div>
+  
+  <!--<div class="form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Keep me logged in</label>
+  </div>-->
+  <button type="submit" class="btn btn-success">Recover Password</button>
+</form>
+
+</div>
