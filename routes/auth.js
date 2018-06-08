@@ -1,5 +1,5 @@
-const authController = require("../controller/authController");
-const apiController = require("../controller/apiController");
+const authController = require("../controller/auth-controller");
+const apiController = require("../controller/api-controller");
 const Recaptcha = require('express-recaptcha').Recaptcha;
 var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
 require('dotenv').config()

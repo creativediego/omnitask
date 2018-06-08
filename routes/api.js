@@ -1,5 +1,5 @@
-const authController = require("../controller/authController");
-const apiController = require("../controller/apiController");
+const authController = require("../controller/auth-controller");
+const apiController = require("../controller/api-controller");
 
 
 module.exports = function(app, passport, db) {

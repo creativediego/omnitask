@@ -1,4 +1,4 @@
-const passwordController = require("../controller/passwordController");
+const passwordController = require("../controller/password-controller");
 
 
 

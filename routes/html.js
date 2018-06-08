@@ -1,5 +1,5 @@
-const authController = require("../controller/authController");
-const htmlController = require("../controller/htmlController");
+const authController = require("../controller/auth-controller");
+const htmlController = require("../controller/html-controller");
 
 
 module.exports = function(app, passport, db) {
