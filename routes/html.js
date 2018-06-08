@@ -1,4 +1,4 @@
-const authController = require("../controller/authController");
+//const authController = require("../controller/authController");
 const htmlController = require("../controller/htmlController");
 
 
