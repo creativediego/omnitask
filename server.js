@@ -37,7 +37,7 @@ const db = require("./models");
 //Routes
 //const authRouter = require("./routes/auth")(app, passport, db);
 //const forgotPasswordRouter = require("./routes/password")(app, passport, db);
-const htmlRouter = require("./routes/html")(app, passport, db);
+//const htmlRouter = require("./routes/html")(app, passport, db);
 const apiRouter = require("./routes/api")(app, passport, db);
 
 
