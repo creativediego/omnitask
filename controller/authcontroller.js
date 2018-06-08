@@ -1,6 +1,6 @@
 const db = require("../models");
-const request = require("request");
-require('dotenv').config()
+//const request = require("request");
+//require('dotenv').config()
 
 
 module.exports.signup = function(req, res) {
@@ -54,7 +54,7 @@ module.exports.validateSignUp = function(req, res, next) {
     const validationErrors = req.validationErrors();
 
     if (validationErrors) {
-        res.render("signup", { errors: validationErrors });
+        res.render("signup", { validationErrors });
 
     } else {
         next();

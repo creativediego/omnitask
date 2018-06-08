@@ -1,0 +1,26 @@
+ 
+<h2 class="text-center">Reset your password</h2>
+<div class="col-lg-6 mt-4 container">
+
+{{#if flashError}}
+<div class="alert alert-danger">{{flashError}}</div>
+{{/if}}
+
+{{#if flashInfo}}
+<div class="alert alert-success">{{flashInfo}}</div>
+{{/if}}
+
+<form id="forgot-password" name="forgot-password" method="post">
+  <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" name="password" id="password" type="password" placeholder="Password" />
+        </div>
+         <div class="form-group">
+                <label for="password">Re-enter password</label>
+                <input class="form-control" name="passwordMatch" id="passwordMatch" type="password" placeholder="Password" />
+        </div>
+       
+  <button type="submit" class="btn btn-success">Reset Password</button>
+</form>
+
+</div>

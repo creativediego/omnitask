@@ -8,4 +8,8 @@ module.exports = function(app, passport, db) {
 
     app.post("/forgot", passwordController.postForgot);
 
+    app.get("/reset/:token", passwordController.getReset);
+
+    app.post("/reset/:token", passwordController.validatePasswordReset, passwordController.postReset);
+
 }
