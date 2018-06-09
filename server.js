@@ -1,18 +1,15 @@
-//Express
+//Dependencies
 require('dotenv').config()
 const express = require("express");
 const app = express();
 const db = require("./models");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const flash = require("connect-flash");
-
-
-const SequelizeStore = require("connect-session-sequelize")(session.Store);
-
 
 //Middleware BodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
