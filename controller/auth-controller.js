@@ -4,7 +4,7 @@ const db = require("../models");
 
 
 module.exports.signup = function(req, res) {
-    console.log(res.recaptcha);
+    //console.log(res.recaptcha);
 
     res.render("signup", { captcha: res.recaptcha });
 
@@ -54,8 +54,7 @@ module.exports.validateSignUp = function(req, res, next) {
     const validationErrors = req.validationErrors();
 
     if (validationErrors) {
-        res.render("signup", { validationErrors });
-
+        res.render("signup", { validationErrors: validationErrors, captcha: res.recaptcha });
     } else {
         next();
     }
