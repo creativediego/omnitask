@@ -2,20 +2,35 @@
 require('dotenv').config()
 const express = require("express");
 const app = express();
+const db = require("./models");
 const passport = require("passport");
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const flash = require("connect-flash");
 
 
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+
+
 //Middleware BodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(expressValidator());
 
 // For Passport
-app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true })); // session secret
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+        db: db.sequelize
+    }),
+    resave: false,
+    proxy: true
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());
@@ -31,8 +46,6 @@ app.use(function(req, res, next) {
 
 });
 
-//DB
-const db = require("./models");
 
 //Routes
 const authRouter = require("./routes/auth")(app, passport, db);
